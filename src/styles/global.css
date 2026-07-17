@@ -1,0 +1,393 @@
+/* K+A Mármoles — design tokens */
+:root {
+  --negro: #0C0C0C;
+  --carbon: #161615;
+  --hueso: #F5F2EC;
+  --laton: #C8A55A;
+  --veta: #8A8A86;
+  --linea: rgba(245, 242, 236, 0.12);
+  --font-display: 'Marcellus', serif;
+  --font-body: 'Archivo', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+body {
+  background: var(--negro);
+  color: var(--hueso);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font-body); cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+.eyebrow {
+  font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--laton); font-weight: 500;
+}
+
+/* ---------- Navbar ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  background: rgba(12, 12, 12, 0.85); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--linea);
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 72px;
+}
+.nav-logo { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.06em; display: flex; align-items: center; gap: 12px; }
+.nav-logo .mono {
+  width: 34px; height: 34px; border: 1px solid var(--laton); display: grid; place-items: center;
+  font-size: 13px; color: var(--laton); letter-spacing: 0;
+}
+.nav-links { display: flex; gap: 36px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
+.nav-links a { color: var(--veta); transition: color 0.25s; padding: 4px 0; }
+.nav-links a:hover, .nav-links a.activo { color: var(--hueso); }
+.nav-links a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.nav-toggle { display: none; background: none; border: 1px solid var(--linea); color: var(--hueso); padding: 8px 12px; font-size: 12px; letter-spacing: 0.1em; }
+
+@media (max-width: 760px) {
+  .nav-links { display: none; }
+  .nav-links.abierto {
+    display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--negro); border-bottom: 1px solid var(--linea); padding: 24px; gap: 20px;
+  }
+  .nav-toggle { display: block; }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden;
+  padding-top: 72px;
+}
+.hero-veta {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.9;
+}
+.hero-veta path {
+  stroke-dasharray: 3000; stroke-dashoffset: 3000;
+  animation: trazarVeta 4s ease-out 0.4s forwards;
+}
+@keyframes trazarVeta { to { stroke-dashoffset: 0; } }
+.hero-contenido { position: relative; z-index: 2; }
+.hero h1 {
+  font-size: clamp(52px, 9vw, 128px);
+  letter-spacing: 0.01em;
+  margin: 20px 0 28px;
+  max-width: 12ch;
+}
+.hero h1 em { font-style: normal; color: var(--laton); }
+.hero p { max-width: 46ch; color: var(--veta); font-size: 17px; margin-bottom: 40px; }
+.hero-acciones { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase;
+  border: 1px solid var(--hueso); background: transparent; color: var(--hueso);
+  transition: all 0.3s;
+}
+.btn:hover { background: var(--hueso); color: var(--negro); }
+.btn:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.btn.oro { border-color: var(--laton); color: var(--laton); }
+.btn.oro:hover { background: var(--laton); color: var(--negro); }
+
+/* Fondo de mármol del hero (textura oscurecida) */
+.hero-fondo {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    linear-gradient(rgba(12, 12, 12, 0.75), rgba(12, 12, 12, 0.75)),
+    url('/productos/banner-ka.png') center / cover no-repeat;
+}
+.hero-con-fondo .hero-veta { z-index: 1; }
+/* Con textura de fondo, el gris --veta pierde contraste: subimos a hueso. */
+.hero-con-fondo p { color: var(--hueso); opacity: 0.88; }
+
+/* ---------- El proceso ---------- */
+.proceso-pasos {
+  list-style: none; display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--laton);
+}
+.proceso-paso { padding: 40px 36px 8px 0; position: relative; }
+.proceso-paso + .proceso-paso { padding-left: 36px; border-left: 1px solid rgba(200, 165, 90, 0.35); }
+.proceso-numero {
+  font-family: var(--font-display); font-size: 15px; color: var(--laton); letter-spacing: 0.12em;
+}
+.proceso-paso h3 { font-size: 24px; margin: 14px 0 14px; }
+.proceso-paso p { font-size: 15px; color: var(--veta); max-width: 34ch; }
+@media (max-width: 860px) {
+  .proceso-pasos { grid-template-columns: 1fr; }
+  .proceso-paso { padding: 32px 0 24px; }
+  .proceso-paso + .proceso-paso { padding-left: 0; border-left: none; border-top: 1px solid rgba(200, 165, 90, 0.35); }
+}
+
+/* ---------- Interludio (imagen a sangre con cita) ---------- */
+.interludio {
+  min-height: 62vh; display: flex; align-items: center; justify-content: center;
+  padding: 120px 24px;
+  background:
+    linear-gradient(rgba(12, 12, 12, 0.6), rgba(12, 12, 12, 0.6)),
+    url('/productos/mesa-centro-giratorio.jpg') center / cover no-repeat;
+  background-attachment: fixed, fixed;
+  border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
+}
+@media (max-width: 860px), (prefers-reduced-motion: reduce) {
+  .interludio { background-attachment: scroll, scroll; min-height: 46vh; padding: 90px 24px; }
+}
+.interludio blockquote { text-align: center; max-width: 30ch; }
+.interludio blockquote p {
+  font-family: var(--font-display); font-size: clamp(26px, 3.6vw, 44px); line-height: 1.25;
+  margin-bottom: 20px;
+}
+.interludio cite { font-style: normal; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--laton); }
+
+/* ---------- Materiales ---------- */
+.materiales {
+  list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
+}
+.material-swatch { aspect-ratio: 4 / 5; overflow: hidden; border: 1px solid var(--linea); }
+/* El SVG se muestra al 320% y se recorta: la textura procedural está calibrada
+   para tamaños grandes y a escala 1:1 se percibe plana. */
+.material-swatch svg { width: 320%; height: 320%; transition: transform 0.6s ease; }
+.material:hover .material-swatch svg { transform: scale(1.04); }
+.material-nombre {
+  display: block; margin-top: 14px;
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--veta);
+}
+.material:hover .material-nombre { color: var(--hueso); }
+@media (max-width: 980px) { .materiales { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .materiales { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+
+/* ---------- Banda CTA ---------- */
+.cta-banda {
+  background: var(--carbon); border-top: 1px solid var(--linea);
+  padding: 110px 0;
+}
+.cta-banda-inner { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.cta-banda h2 { font-size: clamp(32px, 5vw, 58px); margin: 16px 0 18px; max-width: 18ch; }
+.cta-banda p { color: var(--veta); font-size: 16px; max-width: 44ch; margin-bottom: 40px; }
+
+/* ---------- Secciones ---------- */
+.seccion { padding: 110px 0; }
+.seccion-cabecera { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; gap: 24px; flex-wrap: wrap; }
+.seccion-cabecera h2 { font-size: clamp(32px, 4.5vw, 54px); margin-top: 14px; }
+.seccion-cabecera .ver-todo { font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--laton); border-bottom: 1px solid transparent; padding-bottom: 2px; transition: border-color 0.25s; }
+.seccion-cabecera .ver-todo:hover { border-color: var(--laton); }
+
+/* ---------- Grid de productos ---------- */
+.grid-productos {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2px;
+  background: var(--linea);
+  border: 1px solid var(--linea);
+}
+.tarjeta {
+  background: var(--negro); padding: 0; position: relative; overflow: hidden;
+  transition: background 0.3s;
+}
+.tarjeta:hover { background: var(--carbon); }
+.tarjeta-visual { aspect-ratio: 4 / 3; overflow: hidden; position: relative; }
+.tarjeta-visual svg, .tarjeta-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+.tarjeta:hover .tarjeta-visual svg, .tarjeta:hover .tarjeta-visual img { transform: scale(1.05); }
+.tarjeta-info { padding: 24px; border-top: 1px solid var(--linea); }
+.tarjeta-info .marmol { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--laton); }
+.tarjeta-info h3 { font-size: 24px; margin: 8px 0 4px; }
+.tarjeta-info .cat { font-size: 13px; color: var(--veta); }
+
+/* ---------- Filtros ---------- */
+.filtros { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 48px; }
+.filtro {
+  background: none; border: 1px solid var(--linea); color: var(--veta);
+  padding: 10px 22px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  transition: all 0.25s;
+}
+.filtro:hover { border-color: var(--veta); color: var(--hueso); }
+.filtro.activo { border-color: var(--laton); color: var(--laton); }
+
+/* ---------- Detalle de producto ---------- */
+.detalle { padding: 140px 0 110px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 72px; align-items: start; }
+@media (max-width: 900px) { .detalle { grid-template-columns: 1fr; gap: 40px; } }
+.detalle-visual { position: sticky; top: 100px; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--linea); }
+.detalle-visual svg, .detalle-visual img { width: 100%; height: 100%; object-fit: cover; }
+.detalle h1 { font-size: clamp(38px, 5vw, 64px); margin: 14px 0 20px; }
+.detalle .descripcion { color: var(--veta); font-size: 17px; margin-bottom: 40px; max-width: 52ch; }
+.specs { border-top: 1px solid var(--linea); margin-bottom: 40px; }
+.spec { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--linea); font-size: 15px; }
+.spec dt { color: var(--veta); }
+.spec dd { text-align: right; }
+.nota-imagen { font-size: 13px; color: var(--veta); margin-top: 12px; font-style: italic; }
+
+/* ---------- Nosotros / Contacto ---------- */
+.prosa { max-width: 68ch; }
+.prosa p { margin-bottom: 24px; color: var(--veta); font-size: 17px; }
+.prosa p strong { color: var(--hueso); font-weight: 500; }
+.dato-contacto { display: flex; flex-direction: column; gap: 6px; padding: 28px 0; border-bottom: 1px solid var(--linea); }
+.dato-contacto .etiqueta { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--laton); }
+.dato-contacto a:hover { color: var(--laton); }
+
+/* ---------- Footer ---------- */
+.footer { border-top: 1px solid var(--linea); padding: 72px 0 40px; margin-top: 40px; }
+.footer-grid {
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px;
+  padding-bottom: 56px;
+}
+.footer-col h4 {
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--laton); margin-bottom: 22px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.footer-col ul a { font-size: 14px; color: var(--veta); transition: color 0.25s; }
+.footer-col ul a:hover { color: var(--hueso); }
+.footer-col a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+
+.footer-logo { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.06em; display: flex; align-items: center; gap: 12px; }
+.footer-logo .mono {
+  width: 34px; height: 34px; border: 1px solid var(--laton); display: grid; place-items: center;
+  font-size: 13px; color: var(--laton); letter-spacing: 0; flex-shrink: 0;
+}
+.footer-datos { font-style: normal; display: flex; flex-direction: column; gap: 6px; margin: 22px 0; font-size: 14px; color: var(--veta); }
+.footer-datos a:hover { color: var(--hueso); }
+.footer-copy { font-size: 13px; color: var(--veta); }
+
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  padding-top: 28px; border-top: 1px solid var(--linea);
+}
+.footer-social { list-style: none; display: flex; gap: 8px; }
+.footer-social a {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid var(--linea); color: var(--veta); transition: all 0.25s;
+}
+.footer-social a:hover { color: var(--laton); border-color: var(--laton); }
+.footer-social a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+
+@media (max-width: 760px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px 24px; }
+  .footer-marca { grid-column: 1 / -1; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* ---------- Páginas legales ---------- */
+.legal-actualizado { font-size: 13px; color: var(--veta); margin-bottom: 48px; }
+.prosa-legal h2 {
+  font-size: clamp(20px, 2.6vw, 26px); color: var(--hueso);
+  margin: 44px 0 18px;
+}
+.prosa-legal ul { margin: 0 0 24px; padding-left: 22px; color: var(--veta); font-size: 17px; }
+.prosa-legal ul li { margin-bottom: 12px; }
+.prosa-legal ul li::marker { color: var(--laton); }
+
+/* ---------- WhatsApp flotante ---------- */
+.wa-flotante {
+  position: fixed; bottom: 28px; right: 28px; z-index: 46; /* sobre el banner de cookies */
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--laton); color: var(--negro);
+  display: grid; place-items: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  transition: transform 0.25s;
+}
+.wa-flotante:hover { transform: scale(1.08); }
+
+/* ---------- Banner de cookies ---------- */
+.cookie-banner {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 48; /* sobre el botón de WhatsApp */
+  background: var(--carbon); color: var(--hueso);
+  border-top: 1px solid var(--linea);
+  padding: 36px 0 32px;
+  max-height: 85vh; overflow-y: auto;
+  animation: subirBanner 0.4s ease-out;
+}
+@keyframes subirBanner { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.cookie-inner { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 56px; }
+.cookie-cerrar {
+  position: absolute; top: -12px; right: 24px;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: none; border: none; color: var(--veta); transition: color 0.25s;
+}
+.cookie-cerrar:hover { color: var(--hueso); }
+.cookie-cerrar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+
+.cookie-texto { max-width: 640px; }
+.cookie-texto h2 { font-size: 21px; margin-bottom: 12px; }
+.cookie-texto p { font-size: 14px; color: var(--veta); margin: 0 0 20px; max-width: 62ch; }
+.cookie-texto p a { color: var(--laton); border-bottom: 1px solid transparent; transition: border-color 0.25s; }
+.cookie-texto p a:hover { border-color: var(--laton); }
+.cookie-texto p a:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+
+.cookie-categorias { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 16px; }
+.cookie-check { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
+.cookie-check input {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 1px solid var(--veta); background: transparent;
+  display: grid; place-items: center; cursor: pointer; margin: 0;
+}
+.cookie-check input:checked::before {
+  content: ''; width: 10px; height: 10px; background: var(--laton);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 82% 2%, 43% 64%);
+}
+.cookie-check input:hover:not(:disabled) { border-color: var(--laton); }
+.cookie-check input:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.cookie-check input:disabled { border-color: var(--linea); cursor: not-allowed; }
+.cookie-check input:disabled:checked::before { opacity: 0.55; }
+.cookie-check:has(input:disabled) { cursor: not-allowed; color: var(--veta); }
+
+.cookie-detalles-toggle {
+  background: none; border: none; color: var(--laton); padding: 2px 0;
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  border-bottom: 1px solid transparent; transition: border-color 0.25s;
+}
+.cookie-detalles-toggle:hover { border-color: var(--laton); }
+.cookie-detalles-toggle:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.cookie-detalles { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.cookie-detalle { display: flex; gap: 8px; font-size: 13px; }
+.cookie-detalle dt { color: var(--hueso); flex-shrink: 0; }
+.cookie-detalle dt::after { content: ':'; }
+.cookie-detalle dd { color: var(--veta); margin: 0; }
+
+.cookie-acciones { display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; padding-top: 6px; }
+.cookie-pill {
+  border-radius: 999px; padding: 16px 40px; min-width: 240px;
+  font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+  border: 1px solid var(--hueso); background: transparent; color: var(--hueso);
+  transition: all 0.3s; white-space: nowrap;
+}
+.cookie-pill:hover { background: var(--hueso); color: var(--negro); }
+.cookie-pill:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.cookie-pill.oro { background: var(--laton); border-color: var(--laton); color: var(--negro); }
+.cookie-pill.oro:hover { background: transparent; color: var(--laton); }
+
+@media (max-width: 860px) {
+  .cookie-banner { padding: 28px 0 24px; }
+  .cookie-inner { flex-direction: column; gap: 24px; }
+  .cookie-cerrar { top: -8px; right: 12px; }
+  .cookie-categorias { gap: 16px 24px; }
+  .cookie-acciones { flex-direction: column; width: 100%; padding-top: 0; }
+  .cookie-pill { width: 100%; min-width: 0; }
+}
+
+/* Enlace-botón del footer (reabre el banner de cookies) */
+.footer-link-btn {
+  background: none; border: none; padding: 0;
+  font-family: var(--font-body); font-weight: 300; font-size: 14px;
+  color: var(--veta); transition: color 0.25s;
+}
+.footer-link-btn:hover { color: var(--hueso); }
+.footer-link-btn:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+
+/* ---------- Skeleton ---------- */
+.skeleton { background: linear-gradient(90deg, var(--carbon) 25%, #1f1f1e 50%, var(--carbon) 75%); background-size: 200% 100%; animation: brillar 1.4s infinite; }
+@keyframes brillar { to { background-position: -200% 0; } }
