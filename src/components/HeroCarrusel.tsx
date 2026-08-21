@@ -62,13 +62,18 @@ export default function HeroCarrusel({ imagenes }: { imagenes: ImagenHero[] }) {
       )}
       <div className="hero-fondo" aria-hidden="true">
         {imagenes.map((im, i) => (
-          <img key={im.src}
-            src={i < conSrc ? im.src : undefined}
-            className={i === indice ? 'activa' : ''}
-            style={im.posMovil ? ({ '--pos-movil': im.posMovil } as CSSProperties) : undefined}
-            alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async"
-            {...(i === 0 ? ({ fetchpriority: 'high' } as object) : {})}
-          />
+          // Cada .jpg de heroes tiene su gemelo .webp (node scripts/generate-webp.mjs);
+          // el <picture> sirve el webp y deja el jpg como respaldo de formato.
+          <picture key={im.src}>
+            {i < conSrc && <source srcSet={im.src.replace(/\.jpg$/, '.webp')} type="image/webp" />}
+            <img
+              src={i < conSrc ? im.src : undefined}
+              className={i === indice ? 'activa' : ''}
+              style={im.posMovil ? ({ '--pos-movil': im.posMovil } as CSSProperties) : undefined}
+              alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async"
+              {...(i === 0 ? ({ fetchpriority: 'high' } as object) : {})}
+            />
+          </picture>
         ))}
       </div>
     </>

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import MarbleSwatch from '../components/MarbleSwatch'
 import { MATERIALES, nombreCategoria } from '../data/materiales'
-import { ESCENAS_RENDER, NOMBRE_ESCENA, urlRender, useRenders, type EscenaRender } from '../lib/renders'
+import { ESCENAS_RENDER, NOMBRE_ESCENA, useRenders, type EscenaRender } from '../lib/renders'
 
 export default function MaterialDetalle() {
   const { slug } = useParams()
@@ -104,7 +104,7 @@ export default function MaterialDetalle() {
               {ESCENAS_RENDER.filter(e => renders[e]).map(e => (
                 <button key={e} className="ambiente" onClick={() => setAmbiente(e)}
                   aria-label={`Ver ${material.nombre} en ${NOMBRE_ESCENA[e]} a pantalla completa`}>
-                  <img src={urlRender(material.slug, e)} alt={`${material.nombre} aplicado en ${NOMBRE_ESCENA[e]}`}
+                  <img src={renders[e]!} alt={`${material.nombre} aplicado en ${NOMBRE_ESCENA[e]}`}
                     loading="lazy" />
                   <span className="ambiente-nombre" aria-hidden="true">{NOMBRE_ESCENA[e]}</span>
                 </button>
@@ -162,7 +162,7 @@ export default function MaterialDetalle() {
               <path d="M2 2l12 12M14 2L2 14" />
             </svg>
           </button>
-          <img src={urlRender(material.slug, ambiente)} alt={`${material.nombre} aplicado en ${NOMBRE_ESCENA[ambiente]}`}
+          <img src={renders?.[ambiente] ?? undefined} alt={`${material.nombre} aplicado en ${NOMBRE_ESCENA[ambiente]}`}
             onClick={e => e.stopPropagation()} />
         </div>
       )}

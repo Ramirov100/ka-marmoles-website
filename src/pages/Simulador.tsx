@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import SEO from '../components/SEO'
 import { MATERIALES, CATEGORIAS_MATERIAL, nombreCategoria, type Material } from '../data/materiales'
 import { ESCENAS, clipDePoligono, poligonosDe, mascaraPoligonos, mascaraAgujeros, type Escena } from '../data/escenas'
-import { urlRender, useRender, type EscenaRender } from '../lib/renders'
+import { useRender, type EscenaRender } from '../lib/renders'
 
 // Precarga silenciosa de una textura (al pasar el cursor por un swatch).
 const precargar = (src: string | null) => { if (src) new Image().src = src }
@@ -99,8 +99,7 @@ function VisorFoto({ escena, material, anterior, debug }: {
 }
 
 /** Visor de render real: el material ya construido en la escena, sin máscaras. */
-function VisorRender({ escena, material }: { escena: Escena; material: Material }) {
-  const url = urlRender(material.slug, escena.id as EscenaRender)
+function VisorRender({ escena, material, url }: { escena: Escena; material: Material; url: string }) {
   const [cargado, setCargado] = useState(false)
   useEffect(() => { setCargado(false) }, [url])
   return (
@@ -158,9 +157,9 @@ export default function Simulador() {
   }
 
   const conFoto = !!fotosOk[escena.id]
-  // Si existe el render real [slug]-[escena].jpg se muestra tal cual;
-  // si no (o mientras se sondea), el sistema de máscaras funciona como siempre.
-  const conRender = useRender(material.slug, escena.id as EscenaRender) === true
+  // Si existe el render real [slug]-[escena] se muestra tal cual (webp o jpg,
+  // lo que resuelva la sonda); si no, el sistema de máscaras funciona como siempre.
+  const renderUrl = useRender(material.slug, escena.id as EscenaRender)
 
   return (
     <>
@@ -182,8 +181,8 @@ export default function Simulador() {
         <div className="container sim-layout">
           {/* Visor */}
           <div className="sim-visor">
-            {conRender
-              ? <VisorRender escena={escena} material={material} />
+            {renderUrl
+              ? <VisorRender escena={escena} material={material} url={renderUrl} />
               : conFoto
                 ? <VisorFoto escena={escena} material={material} anterior={anterior} debug={debug} />
                 : <VisorSVG escena={escena} material={material} anterior={anterior} />}
