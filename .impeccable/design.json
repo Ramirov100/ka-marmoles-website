@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-18T00:00:00Z",
+  "title": "Design System: K+A Mármoles",
+  "extensions": {
+    "colorMeta": {
+      "negro-sala": { "role": "neutral", "displayName": "Negro Sala", "canonical": "#0C0C0C", "tonalRamp": ["#0C0C0C", "#161615", "#242422", "#3A3A37", "#55554F", "#75756E", "#9B9B93", "#C6C6BE"] },
+      "carbon": { "role": "neutral", "displayName": "Carbón", "canonical": "#161615", "tonalRamp": ["#0C0C0C", "#161615", "#1F1F1E", "#2C2C2A", "#3E3E3B", "#5A5A55", "#83837C", "#B4B4AC"] },
+      "hueso": { "role": "neutral", "displayName": "Hueso", "canonical": "#F5F2EC", "tonalRamp": ["#2A2823", "#4B4840", "#6E6A60", "#918C81", "#B3AEA3", "#D0CCC2", "#E5E1D9", "#F5F2EC"] },
+      "laton": { "role": "primary", "displayName": "Latón", "canonical": "#C8A55A", "tonalRamp": ["#2E2410", "#4E3D1D", "#6F582C", "#90733C", "#B08F4B", "#C8A55A", "#DABE7F", "#EAD7AB"] },
+      "gris-veta": { "role": "neutral", "displayName": "Gris Veta", "canonical": "#8A8A86", "tonalRamp": ["#1B1B1A", "#31312F", "#494947", "#626260", "#8A8A86", "#A5A5A1", "#C1C1BD", "#DDDDD9"] },
+      "linea": { "role": "neutral", "displayName": "Línea", "canonical": "rgba(245, 242, 236, 0.12)", "tonalRamp": ["#F5F2EC0A", "#F5F2EC14", "#F5F2EC1F", "#F5F2EC2E", "#F5F2EC42", "#F5F2EC5C", "#F5F2EC80", "#F5F2ECB3"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only — one monumental Marcellus gesture per page, max 12ch." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings in Marcellus 400." },
+      "title": { "displayName": "Title", "purpose": "Product card names and process-step titles." },
+      "body": { "displayName": "Body", "purpose": "Prose in Archivo 300; Gris Veta or Hueso, 46–68ch measure." },
+      "label": { "displayName": "Label", "purpose": "The brass-plaque signage: uppercase, wide-tracked eyebrows, nav, buttons, marble tags." }
+    },
+    "shadows": [
+      { "name": "flotante", "value": "0 8px 30px rgba(0,0,0,0.5)", "purpose": "The One Shadow Rule: only the floating WhatsApp button may cast it." }
+    ],
+    "motion": [
+      { "name": "warmup", "value": "all 0.3s", "purpose": "Button fill/invert — the slow brass warm-up." },
+      { "name": "zoom-lento", "value": "transform 0.7s ease", "purpose": "Product image hover zoom to scale(1.05)." },
+      { "name": "estado", "value": "color 0.25s / border-color 0.25s", "purpose": "Link and chip state changes." },
+      { "name": "trazar-veta", "value": "stroke-dashoffset 4s ease-out 0.4s", "purpose": "Hero vein line-drawing entrance." }
+    ],
+    "breakpoints": [
+      { "name": "movil", "value": "560px" },
+      { "name": "nav", "value": "760px" },
+      { "name": "tableta", "value": "860px" },
+      { "name": "detalle", "value": "900px" },
+      { "name": "materiales", "value": "980px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón Outline",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Default action — square-cut hairline plaque that fills with bone on hover.",
+      "html": "<button class=\"ds-btn\">Ver colección</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; font-family: Archivo, sans-serif; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; border: 1px solid #F5F2EC; background: transparent; color: #F5F2EC; border-radius: 0; cursor: pointer; transition: all 0.3s; } .ds-btn:hover { background: #F5F2EC; color: #0C0C0C; } .ds-btn:focus-visible { outline: 1px solid #C8A55A; outline-offset: 4px; }"
+    },
+    {
+      "name": "Botón Latón",
+      "kind": "button",
+      "refersTo": "button-brass",
+      "description": "The quote CTA — brass border and text, filling brass on hover. One per viewport.",
+      "html": "<button class=\"ds-btn-oro\">Cotizar por WhatsApp</button>",
+      "css": ".ds-btn-oro { display: inline-flex; align-items: center; gap: 10px; padding: 14px 32px; font-family: Archivo, sans-serif; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; border: 1px solid #C8A55A; background: transparent; color: #C8A55A; border-radius: 0; cursor: pointer; transition: all 0.3s; } .ds-btn-oro:hover { background: #C8A55A; color: #0C0C0C; } .ds-btn-oro:focus-visible { outline: 1px solid #C8A55A; outline-offset: 4px; }"
+    },
+    {
+      "name": "Filtro de categoría",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Collection filter — hairline chip; active state turns brass, never fills.",
+      "html": "<span style=\"display:inline-flex;gap:12px\"><button class=\"ds-filtro\">Mesas de centro</button><button class=\"ds-filtro ds-filtro-activo\">Escritorios</button></span>",
+      "css": ".ds-filtro { background: none; border: 1px solid rgba(245,242,236,0.12); color: #8A8A86; padding: 10px 22px; font-family: Archivo, sans-serif; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 0; cursor: pointer; transition: all 0.25s; } .ds-filtro:hover { border-color: #8A8A86; color: #F5F2EC; } .ds-filtro:focus-visible { outline: 1px solid #C8A55A; outline-offset: 3px; } .ds-filtro-activo { border-color: #C8A55A; color: #C8A55A; }"
+    },
+    {
+      "name": "Tarjeta de producto",
+      "kind": "card",
+      "refersTo": "card-product",
+      "description": "The vitrine — square card lifting to Carbón on hover; brass marble tag over Marcellus title.",
+      "html": "<a href=\"#\" class=\"ds-tarjeta\"><span class=\"ds-tarjeta-visual\"></span><span class=\"ds-tarjeta-info\"><span class=\"ds-marmol\">Negro Marquina</span><span class=\"ds-nombre\">Mesa Comedor Santito</span><span class=\"ds-cat\">Mesas de Comedor</span></span></a>",
+      "css": ".ds-tarjeta { display: block; width: 300px; background: #0C0C0C; border: 1px solid rgba(245,242,236,0.12); text-decoration: none; transition: background 0.3s; } .ds-tarjeta:hover { background: #161615; } .ds-tarjeta-visual { display: block; aspect-ratio: 4/3; background: linear-gradient(120deg, #141414 0%, #2A2A28 45%, #141414 70%); } .ds-tarjeta-info { display: block; padding: 24px; border-top: 1px solid rgba(245,242,236,0.12); } .ds-marmol { display: block; font-family: Archivo, sans-serif; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: #C8A55A; } .ds-nombre { display: block; font-family: Marcellus, serif; font-size: 24px; color: #F5F2EC; margin: 8px 0 4px; line-height: 1.1; } .ds-cat { display: block; font-family: Archivo, sans-serif; font-size: 13px; font-weight: 300; color: #8A8A86; }"
+    },
+    {
+      "name": "Eyebrow Latón",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "The brass plaque label that opens sections and the hero.",
+      "html": "<span class=\"ds-eyebrow\">El proceso</span>",
+      "css": ".ds-eyebrow { font-family: Archivo, sans-serif; font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #C8A55A; font-weight: 500; }"
+    },
+    {
+      "name": "Navegación",
+      "kind": "nav",
+      "refersTo": "label",
+      "description": "Fixed blur-backdrop bar; resting Gris Veta links warm to Hueso.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-logo\"><span class=\"ds-nav-mono\">K+A</span>Mármoles</span><span class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-a ds-nav-activo\">Inicio</a><a href=\"#\" class=\"ds-nav-a\">Colección</a><a href=\"#\" class=\"ds-nav-a\">Nosotros</a><a href=\"#\" class=\"ds-nav-a\">Contacto</a></span></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 32px; height: 72px; padding: 0 24px; background: rgba(12,12,12,0.85); border-bottom: 1px solid rgba(245,242,236,0.12); min-width: 520px; } .ds-nav-logo { font-family: Marcellus, serif; font-size: 20px; letter-spacing: 0.06em; color: #F5F2EC; display: flex; align-items: center; gap: 12px; } .ds-nav-mono { width: 34px; height: 34px; border: 1px solid #C8A55A; display: grid; place-items: center; font-size: 13px; color: #C8A55A; } .ds-nav-links { display: flex; gap: 36px; } .ds-nav-a { font-family: Archivo, sans-serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A8A86; text-decoration: none; transition: color 0.25s; } .ds-nav-a:hover, .ds-nav-activo { color: #F5F2EC; } .ds-nav-a:focus-visible { outline: 1px solid #C8A55A; outline-offset: 4px; }"
+    },
+    {
+      "name": "Casilla de cookies",
+      "kind": "input",
+      "refersTo": "filter-chip",
+      "description": "The only shipped input pattern — square checkbox filling with a brass check.",
+      "html": "<label class=\"ds-check\"><input type=\"checkbox\" checked> Analíticas</label>",
+      "css": ".ds-check { display: inline-flex; align-items: center; gap: 10px; font-family: Archivo, sans-serif; font-size: 13px; color: #F5F2EC; cursor: pointer; } .ds-check input { appearance: none; -webkit-appearance: none; width: 18px; height: 18px; border: 1px solid #8A8A86; background: transparent; display: grid; place-items: center; cursor: pointer; margin: 0; } .ds-check input:checked::before { content: ''; width: 10px; height: 10px; background: #C8A55A; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 82% 2%, 43% 64%); } .ds-check input:hover { border-color: #C8A55A; } .ds-check input:focus-visible { outline: 1px solid #C8A55A; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "El Museo de Noche",
+    "overview": "A museum after hours. The rooms are near-black, each piece stands under its own quiet light, the plaques are brass, the vitrines are hairline glass. The visitor whispers. The interface is the darkened room, the marble photography is the lit object, and the UI chrome behaves like engraved signage that never competes with the collection. The system is sober, precise, and monumental: low density, one dominant idea per fold, depth that is optical (light inside the stone) rather than simulated (CSS shadows). It explicitly rejects the stone-trade look, generic furniture e-commerce, rustic-artisanal warmth, template SaaS aesthetics, bright white backgrounds, and rounded cards with drop shadows.",
+    "keyCharacteristics": [
+      "Near-black galleries (#0C0C0C) with bone text and a single brass voice",
+      "Square-cut geometry everywhere; hairline 1px borders instead of shadows",
+      "Marcellus display serif at monumental scale over featherweight Archivo body",
+      "Uppercase, wide-tracked labels as the brass-plaque signage system",
+      "The stone is the protagonist; UI recedes"
+    ],
+    "rules": [
+      { "name": "The Brass Budget Rule", "body": "Latón appears on well under 10% of any screen. If two adjacent elements are both brass, one of them is wrong.", "section": "colors" },
+      { "name": "The No-White Rule", "body": "Pure white (#FFFFFF) is prohibited. The lightest value in the system is Hueso (#F5F2EC). Bright white backgrounds never appear, not even in modals or form fields.", "section": "colors" },
+      { "name": "The Carved Once Rule", "body": "Marcellus exists in exactly one weight (400) and is never italicized, bolded, or tracked tighter than -0.01em. Stone is carved once.", "section": "typography" },
+      { "name": "The One Shadow Rule", "body": "Exactly one element on the entire site may cast a shadow: the floating WhatsApp button. Anything else needing separation gets a hairline border or a Carbón background.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep Negro Sala (#0C0C0C) as the body background of every page — the darkened room is the brand.",
+      "Do use 1px Línea hairlines for all separation: card grids, specs tables, section borders.",
+      "Do reserve Latón for what must be read next: one CTA, one label system, active states, focus rings.",
+      "Do let photography carry the light; oversize it, crop it, and keep UI chrome off of it except a single overlaid headline or quote.",
+      "Do respect prefers-reduced-motion on every animation, and keep hover transitions in the 0.25–0.7s ease range.",
+      "Do state real dimensions and real marble varieties on every piece — precision is the credibility."
+    ],
+    "donts": [
+      "Don't use bright white backgrounds anywhere — a named anti-reference; Hueso is the ceiling.",
+      "Don't add rounded cards with drop shadows — square-cut geometry and the One Shadow Rule prohibit it; that's the template-SaaS look PRODUCT.md bans.",
+      "Don't drift toward the stone-distributor register: no slab grids, no per-m² pricing tables, no promo banners.",
+      "Don't add e-commerce furniture: no carts, prices, discount badges, or buy-now — every path ends in a conversation, not a checkout.",
+      "Don't go rustic-artisanal: no textured paper backgrounds, no handwritten fonts, no burlap warmth. The register is museum, not market.",
+      "Don't fabricate proof — no invented testimonials, press logos, or awards, ever.",
+      "Don't touch the design tokens (colors, fonts) without explicit approval — they are contractual (see CLAUDE.md)."
+    ]
+  }
+}

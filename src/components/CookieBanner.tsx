@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useFooterVisible } from '../lib/useFooterVisible'
 
 const NOMBRE_COOKIE = 'ka_cookies'
 const DIAS_VIGENCIA = 365
@@ -38,21 +39,38 @@ export default function CookieBanner() {
   const [rendimiento, setRendimiento] = useState(true)
   const [funcionalidad, setFuncionalidad] = useState(true)
   const [detalles, setDetalles] = useState(false)
+  const footerVisible = useFooterVisible()
+
+  const abrir = () => {
+    const guardadas = leerEleccion()?.split('.')
+    if (guardadas) {
+      setRendimiento(guardadas.includes('ren'))
+      setFuncionalidad(guardadas.includes('fun'))
+    }
+    setVisible(true)
+  }
 
   useEffect(() => {
-    const abrir = () => {
-      const guardadas = leerEleccion()?.split('.')
-      if (guardadas) {
-        setRendimiento(guardadas.includes('ren'))
-        setFuncionalidad(guardadas.includes('fun'))
-      }
-      setVisible(true)
-    }
     window.addEventListener(EVENTO_ABRIR, abrir)
     return () => window.removeEventListener(EVENTO_ABRIR, abrir)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (!visible) return null
+  // Banner cerrado: solo el botón discreto para reabrir la configuración.
+  if (!visible) {
+    return (
+      <button className={`cookie-reabrir ${footerVisible ? 'oculto' : ''}`} onClick={abrir} aria-label="Configuración de cookies">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+          <path d="M21 12a9 9 0 1 1-9-9c0 2 1.5 3.5 3.5 3.5 0 2 1.5 3.5 3.5 3.5.7 0 1.4-.2 2-.6Z" />
+          <circle cx="9" cy="10" r="0.6" fill="currentColor" stroke="none" />
+          <circle cx="13" cy="14" r="0.6" fill="currentColor" stroke="none" />
+          <circle cx="8.5" cy="15" r="0.6" fill="currentColor" stroke="none" />
+          <circle cx="14" cy="9" r="0.6" fill="currentColor" stroke="none" />
+        </svg>
+        <span className="cookie-reabrir-texto" aria-hidden="true">Configuración de cookies</span>
+      </button>
+    )
+  }
 
   const guardar = (categorias: string[]) => {
     guardarEleccion(categorias)

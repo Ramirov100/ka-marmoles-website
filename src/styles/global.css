@@ -41,40 +41,82 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 }
 
 /* ---------- Navbar ---------- */
+/* Arranca transparente sobre el hero; .nav-solida aparece tras ~80px de scroll. */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-  background: rgba(12, 12, 12, 0.85); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--linea);
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+.nav-solida {
+  background: rgba(12, 12, 12, 0.85); backdrop-filter: blur(12px);
+  border-bottom-color: var(--linea);
+}
+/* Barra a lo ancho del viewport (sin .container): logo cerca del borde, estilo Antolini. */
 .nav-inner {
   display: flex; align-items: center; justify-content: space-between;
-  height: 72px;
+  height: 96px; padding: 0 40px;
 }
-.nav-logo { font-family: var(--font-display); font-size: 20px; letter-spacing: 0.06em; display: flex; align-items: center; gap: 12px; }
-.nav-logo .mono {
-  width: 34px; height: 34px; border: 1px solid var(--laton); display: grid; place-items: center;
-  font-size: 13px; color: var(--laton); letter-spacing: 0;
+.nav-logo { display: flex; align-items: center; cursor: pointer; }
+.nav-logo:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.nav-logo img { display: block; height: 60px; width: auto; }
+
+.menu-trigger {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: none; border: none; padding: 10px 4px;
+  color: var(--hueso); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
+  transition: color 0.25s;
 }
-.nav-links { display: flex; gap: 36px; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; }
-.nav-links a { color: var(--veta); transition: color 0.25s; padding: 4px 0; }
-.nav-links a:hover, .nav-links a.activo { color: var(--hueso); }
-.nav-links a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
-.nav-toggle { display: none; background: none; border: 1px solid var(--linea); color: var(--hueso); padding: 8px 12px; font-size: 12px; letter-spacing: 0.1em; }
+.menu-trigger:hover { color: var(--laton); }
+.menu-trigger:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
 
 @media (max-width: 760px) {
-  .nav-links { display: none; }
-  .nav-links.abierto {
-    display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0;
-    background: var(--negro); border-bottom: 1px solid var(--linea); padding: 24px; gap: 20px;
-  }
-  .nav-toggle { display: block; }
+  .nav-inner { height: 72px; padding: 0 20px; }
+  .nav-logo img { height: 44px; }
+}
+
+/* ---------- Menú de pantalla completa ---------- */
+.menu-overlay {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(12, 12, 12, 0.97);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 96px clamp(24px, 8vw, 120px);
+  animation: aparecerMenu 0.35s ease-out;
+}
+.menu-overlay.cerrando { animation: desvanecerMenu 0.3s ease-out forwards; }
+@keyframes aparecerMenu { from { opacity: 0; } to { opacity: 1; } }
+@keyframes desvanecerMenu { from { opacity: 1; } to { opacity: 0; } }
+.menu-cerrar {
+  position: absolute; top: 26px; right: 40px;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: none; border: none; color: var(--veta); transition: color 0.25s;
+}
+.menu-cerrar:hover { color: var(--laton); }
+.menu-cerrar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.menu-enlaces { display: flex; flex-direction: column; gap: clamp(6px, 2vh, 20px); }
+.menu-enlaces a {
+  font-family: var(--font-display); font-size: clamp(38px, 6.5vw, 84px); line-height: 1.12;
+  color: var(--hueso); width: fit-content; transition: color 0.25s;
+}
+.menu-enlaces a:hover, .menu-enlaces a.activo { color: var(--laton); }
+.menu-enlaces a:focus-visible { outline: 1px solid var(--laton); outline-offset: 6px; }
+.menu-contacto {
+  position: absolute; left: clamp(24px, 8vw, 120px); right: clamp(24px, 8vw, 120px); bottom: 36px;
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: 13px; color: var(--veta);
+}
+.menu-contacto a { transition: color 0.25s; }
+.menu-contacto a:hover { color: var(--hueso); }
+.menu-contacto a:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+@media (max-width: 760px) {
+  .menu-cerrar { right: 16px; top: 14px; }
 }
 
 /* ---------- Hero ---------- */
 .hero {
   min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden;
-  padding-top: 72px;
+  padding-top: 96px;
 }
+@media (max-width: 760px) { .hero { padding-top: 72px; } }
 .hero-veta {
   position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.9;
 }
@@ -85,10 +127,13 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 @keyframes trazarVeta { to { stroke-dashoffset: 0; } }
 .hero-contenido { position: relative; z-index: 2; }
 .hero h1 {
-  font-size: clamp(52px, 9vw, 128px);
+  /* Escala ajustada al eslogan largo: dos líneas en escritorio
+     ("Donde la naturaleza / se convierte en arte."). */
+  font-size: clamp(44px, 7vw, 96px);
   letter-spacing: 0.01em;
   margin: 20px 0 28px;
-  max-width: 12ch;
+  max-width: 21ch;
+  text-wrap: balance;
 }
 .hero h1 em { font-style: normal; color: var(--laton); }
 .hero p { max-width: 46ch; color: var(--veta); font-size: 17px; margin-bottom: 40px; }
@@ -105,12 +150,62 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .btn.oro { border-color: var(--laton); color: var(--laton); }
 .btn.oro:hover { background: var(--laton); color: var(--negro); }
 
-/* Fondo de mármol del hero (textura oscurecida) */
+/* ---------- Barra de progreso del carrusel (borde superior del viewport) ---------- */
+.carrusel-progreso {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 55; /* sobre la barra de navegación (50) */
+  display: flex; gap: 4px; height: 3px;
+}
+.progreso-segmento {
+  flex: 1; position: relative; padding: 0; border: none; cursor: pointer;
+  background: rgba(245, 242, 236, 0.16); /* pista: hueso translúcido, lee como línea */
+}
+/* Zona táctil generosa sin engordar la barra visible. */
+.progreso-segmento::after { content: ''; position: absolute; left: 0; right: 0; top: 0; bottom: -9px; }
+.progreso-segmento:focus-visible { outline: 1px solid var(--laton); outline-offset: 2px; }
+.progreso-relleno {
+  display: block; width: 100%; height: 100%;
+  background: var(--laton);
+  transform: scaleX(0); transform-origin: left;
+}
+.progreso-relleno.activo { animation: llenarSegmento linear forwards; }
+@keyframes llenarSegmento { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+/* Los segmentos ya recorridos quedan en hueso apagado hasta reiniciar el ciclo. */
+.progreso-relleno.lleno { transform: scaleX(1); background: var(--hueso); opacity: 0.45; }
+.carrusel-progreso.pausado .progreso-relleno.activo { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  /* Sin animación: el segmento activo se muestra lleno. */
+  .progreso-relleno.activo { transform: scaleX(1); }
+}
+
+/* Fondo fotográfico del hero. La imagen es un <img> real para poder marcarla
+   con fetchpriority=high (es el LCP); el oscurecido va en ::after como gradiente
+   diagonal: denso sobre la zona de texto (izquierda), ligero donde luce la piedra. */
 .hero-fondo {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    linear-gradient(rgba(12, 12, 12, 0.75), rgba(12, 12, 12, 0.75)),
-    url('/productos/banner-ka.png') center / cover no-repeat;
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+/* Carrusel: imágenes apiladas, fundido de 1s; la activa hace un zoom Ken Burns sutil.
+   Bajo prefers-reduced-motion el kill-switch global anula transición y animación,
+   y el componente ni siquiera rota: queda la primera imagen estática. */
+.hero-fondo img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  opacity: 0; transition: opacity 1s ease;
+}
+.hero-fondo img.activa { opacity: 1; animation: kenburns 8s ease-out forwards; }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.06); } }
+.hero-fondo::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(100deg,
+    rgba(12, 12, 12, 0.88) 0%,
+    rgba(12, 12, 12, 0.80) 65%,
+    rgba(12, 12, 12, 0.42) 88%,
+    rgba(12, 12, 12, 0.26) 100%);
+}
+@media (max-width: 700px) {
+  /* En móvil cada imagen puede definir su encuadre con --pos-movil,
+     y el oscurecido cubre parejo porque el texto ocupa todo el ancho. */
+  .hero-fondo img { object-position: var(--pos-movil, center); }
+  .hero-fondo::after { background: rgba(12, 12, 12, 0.74); }
 }
 .hero-con-fondo .hero-veta { z-index: 1; }
 /* Con textura de fondo, el gris --veta pierde contraste: subimos a hueso. */
@@ -140,7 +235,7 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
   padding: 120px 24px;
   background:
     linear-gradient(rgba(12, 12, 12, 0.6), rgba(12, 12, 12, 0.6)),
-    url('/productos/mesa-centro-giratorio.jpg') center / cover no-repeat;
+    url('/heroes/hero-interior-4.jpg') center / cover no-repeat;
   background-attachment: fixed, fixed;
   border-top: 1px solid var(--linea); border-bottom: 1px solid var(--linea);
 }
@@ -152,7 +247,19 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
   font-family: var(--font-display); font-size: clamp(26px, 3.6vw, 44px); line-height: 1.25;
   margin-bottom: 20px;
 }
-.interludio cite { font-style: normal; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--laton); }
+/* En hueso, no latón: sobre la nueva imagen clara el latón no alcanza contraste AA. */
+.interludio cite { font-style: normal; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hueso); }
+
+/* ---------- Cabecera de página con fotografía (Materiales, Nosotros) ---------- */
+/* La imagen llega por --imagen-cabecera; el gradiente funde la foto oscurecida
+   con el negro de la página para que el contenido continúe sin costura. */
+.cabecera-pagina {
+  padding: 200px 0 90px; /* espacio superior amplio: la barra fija flota encima */
+  background:
+    linear-gradient(rgba(12, 12, 12, 0.84), var(--negro)),
+    var(--imagen-cabecera) var(--posicion-cabecera, center) / cover no-repeat;
+}
+.cabecera-pagina + .seccion { padding-top: 0; }
 
 /* ---------- Materiales ---------- */
 .materiales {
@@ -163,13 +270,233 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
    para tamaños grandes y a escala 1:1 se percibe plana. */
 .material-swatch svg { width: 320%; height: 320%; transition: transform 0.6s ease; }
 .material:hover .material-swatch svg { transform: scale(1.04); }
+.material-swatch img {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
+}
+.material:hover .material-swatch img { transform: scale(1.04); }
 .material-nombre {
   display: block; margin-top: 14px;
   font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--veta);
 }
 .material:hover .material-nombre { color: var(--hueso); }
+.material a { display: block; }
+.material a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
 @media (max-width: 980px) { .materiales { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 560px) { .materiales { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+
+/* ---------- Detalle de material ---------- */
+.material-hero {
+  position: relative; height: min(72vh, 640px); overflow: hidden;
+  display: flex; align-items: flex-end;
+}
+.material-hero img, .material-hero svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.material-hero-velo {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(12, 12, 12, 0.55) 0%, rgba(12, 12, 12, 0.15) 45%, rgba(12, 12, 12, 0.82) 100%);
+}
+.material-hero-titulo { position: relative; z-index: 1; padding-bottom: 48px; }
+.material-hero-titulo h1 {
+  font-size: clamp(40px, 6.5vw, 92px); letter-spacing: 0.01em; max-width: 16ch;
+  text-wrap: balance;
+}
+
+.migas {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  padding-top: 22px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--veta);
+}
+.migas a { color: var(--veta); transition: color 0.25s; }
+.migas a:hover { color: var(--laton); }
+.migas a:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.migas [aria-current] { color: var(--hueso); }
+
+.material-subtitulo { font-size: 14px; letter-spacing: 0.1em; color: var(--veta); margin-bottom: 28px; }
+.material-descripcion { color: var(--veta); font-size: 17px; max-width: 62ch; }
+
+.material-closeup {
+  position: relative; display: block; width: 100%; padding: 0;
+  aspect-ratio: 21 / 9; overflow: hidden;
+  border: 1px solid var(--linea); background: var(--carbon); cursor: zoom-in;
+}
+.material-closeup img, .material-closeup svg {
+  width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; display: block;
+}
+.material-closeup:hover img { transform: scale(1.03); }
+.material-closeup:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.material-closeup-nota {
+  position: absolute; right: 20px; bottom: 16px;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hueso);
+  background: rgba(12, 12, 12, 0.55); padding: 8px 14px;
+}
+@media (max-width: 700px) { .material-closeup { aspect-ratio: 4 / 3; } }
+
+/* Ambientes: renders reales del material aplicado en cocina, baño y sala */
+.ambientes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.ambiente {
+  position: relative; padding: 0; overflow: hidden;
+  border: 1px solid var(--linea); background: var(--carbon); cursor: zoom-in;
+}
+.ambiente img {
+  width: 100%; height: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block;
+  transition: transform 0.7s ease;
+}
+.ambiente:hover img { transform: scale(1.03); }
+.ambiente:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.ambiente-nombre {
+  position: absolute; left: 16px; bottom: 14px;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--hueso);
+  background: rgba(12, 12, 12, 0.55); padding: 7px 12px; pointer-events: none;
+}
+@media (max-width: 700px) { .ambientes { grid-template-columns: 1fr; } }
+
+.grid-relacionados { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 700px) { .grid-relacionados { grid-template-columns: 1fr 1fr; } }
+
+/* Visor a pantalla completa */
+.visor-piedra {
+  position: fixed; inset: 0; z-index: 70;
+  background: rgba(12, 12, 12, 0.96);
+  display: grid; place-items: center; padding: clamp(16px, 4vw, 48px);
+  animation: aparecerMenu 0.3s ease-out; cursor: zoom-out;
+}
+.visor-piedra img {
+  max-width: 100%; max-height: 100%; object-fit: contain; cursor: default;
+  border: 1px solid var(--linea);
+}
+.visor-cerrar {
+  position: absolute; top: 22px; right: 28px;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: none; border: none; color: var(--veta); transition: color 0.25s;
+}
+.visor-cerrar:hover { color: var(--laton); }
+.visor-cerrar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+
+/* ---------- Simulador ---------- */
+.sim-layout {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 40px 56px; align-items: start;
+}
+.sim-escena {
+  position: relative; aspect-ratio: 1600 / 1000; overflow: hidden;
+  background: var(--carbon); border: 1px solid var(--linea);
+}
+.sim-escena > svg, .sim-sala {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill;
+}
+.sim-piedra { position: absolute; inset: 0; }
+.sim-textura {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.sim-textura.entrante { animation: aparecerTextura 0.35s ease-out; }
+@keyframes aparecerTextura { from { opacity: 0; } to { opacity: 1; } }
+
+/* Modo foto: capas de superficies texturizadas + foto calada + velo de luz real */
+.sim-capa { position: absolute; inset: 0; }
+.sim-capa.entrante { animation: aparecerTextura 0.35s ease-out; }
+.sim-superficie { position: absolute; inset: 0; }
+.sim-tex {
+  position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+  background-repeat: repeat; background-position: center;
+}
+.sim-foto {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+/* La propia foto, multiplicada sobre la textura: sombras y reflejos reales. */
+.sim-foto-luz { mix-blend-mode: multiply; opacity: 0.75; pointer-events: none; }
+/* Insignia discreta cuando el visor muestra un render real, no una aproximación */
+.sim-render-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 4;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--hueso); background: rgba(12, 12, 12, 0.55);
+  border: 1px solid var(--linea); padding: 6px 10px; pointer-events: none;
+}
+.sim-espacio-mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Contornos de calibración (?debug=1) */
+.sim-debug { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.sim-debug polygon {
+  fill: rgba(200, 165, 90, 0.12); stroke: #C8A55A;
+  vector-effect: non-scaling-stroke; stroke-width: 1.5px;
+}
+.sim-debug text { fill: #F5F2EC; font-size: 2.6px; font-family: var(--font-body); }
+.sim-debug .sim-debug-indice { font-size: 5px; fill: #C8A55A; paint-order: stroke; stroke: rgba(12,12,12,0.8); stroke-width: 0.6; }
+/* Lectura de coordenadas en modo calibración */
+.sim-lectura {
+  position: absolute; top: 10px; left: 10px; z-index: 5;
+  display: flex; flex-direction: column; gap: 2px;
+  background: rgba(12, 12, 12, 0.82); border: 1px solid var(--linea);
+  padding: 8px 12px; font-size: 12px; color: var(--hueso);
+  font-variant-numeric: tabular-nums; pointer-events: none;
+}
+.sim-lectura span::first-line { letter-spacing: 0.04em; }
+/* La piedra hereda la luz de la escena: gradiente que multiplica solo la zona enmascarada. */
+.sim-luz {
+  position: absolute; inset: 0; mix-blend-mode: multiply; pointer-events: none;
+  background: linear-gradient(115deg, rgba(0,0,0,0.36) 0%, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.30) 100%);
+}
+
+.sim-info {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap; margin-top: 22px;
+}
+.sim-info h3 { font-size: clamp(22px, 2.6vw, 30px); margin-top: 8px; }
+.sim-acciones { display: flex; gap: 12px; flex-wrap: wrap; }
+.sim-acciones .btn { padding: 12px 22px; font-size: 12px; }
+
+.sim-espacios { display: flex; gap: 14px; margin-top: 14px; }
+.sim-espacio {
+  flex: 1; padding: 0; background: none; border: 1px solid var(--linea);
+  cursor: pointer; transition: border-color 0.25s;
+}
+.sim-espacio:hover { border-color: var(--veta); }
+.sim-espacio.activo { border-color: var(--laton); }
+.sim-espacio:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.sim-espacio-mini { position: relative; display: block; aspect-ratio: 1600 / 1000; overflow: hidden; }
+.sim-espacio-mini svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sim-espacio-nombre {
+  display: block; padding: 10px 0 12px;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--veta);
+}
+.sim-espacio.activo .sim-espacio-nombre { color: var(--laton); }
+
+.sim-filtros { margin: 14px 0 18px; gap: 8px; }
+.sim-filtros .filtro { padding: 8px 14px; font-size: 11px; }
+
+.sim-swatches {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px;
+  max-height: 46vh; overflow-y: auto; padding-right: 6px;
+}
+.sim-swatch {
+  position: relative; aspect-ratio: 1; padding: 0; background: var(--carbon);
+  border: 1px solid var(--linea); cursor: pointer; transition: border-color 0.25s;
+}
+.sim-swatch img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sim-swatch:hover { border-color: var(--veta); }
+.sim-swatch.activo { border-color: var(--laton); }
+.sim-swatch.activo::after {
+  content: ''; position: absolute; inset: 1px; border: 1px solid var(--laton); pointer-events: none;
+}
+.sim-swatch:focus-visible { outline: 1px solid var(--laton); outline-offset: 2px; }
+
+@media (max-width: 900px) {
+  .sim-layout { grid-template-columns: 1fr; gap: 28px; }
+  /* El visor queda fijo arriba mientras se recorren los materiales. */
+  .sim-visor {
+    position: sticky; top: 72px; z-index: 30;
+    background: var(--negro); padding-bottom: 12px;
+  }
+  .sim-info { margin-top: 14px; gap: 12px; }
+  .sim-swatches { max-height: none; overflow: visible; }
+}
+
+/* ---------- Página de materiales (catálogo de piedra) ---------- */
+.grid-materiales {
+  list-style: none; display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 40px 20px;
+}
+@media (max-width: 560px) { .grid-materiales { grid-template-columns: repeat(2, 1fr); gap: 28px 16px; } }
 
 /* ---------- Banda CTA ---------- */
 .cta-banda {
@@ -198,11 +525,14 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
   transition: background 0.3s;
 }
 .tarjeta:hover { background: var(--carbon); }
-.tarjeta-visual { aspect-ratio: 4 / 3; overflow: hidden; position: relative; }
+.tarjeta-visual { display: block; aspect-ratio: 4 / 3; overflow: hidden; position: relative; }
 .tarjeta-visual svg, .tarjeta-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
 .tarjeta:hover .tarjeta-visual svg, .tarjeta:hover .tarjeta-visual img { transform: scale(1.05); }
 .tarjeta-info { padding: 24px; border-top: 1px solid var(--linea); }
 .tarjeta-info .marmol { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--laton); }
+.marmol-enlace { border-bottom: 1px solid transparent; transition: border-color 0.25s; width: fit-content; display: inline-block; }
+.marmol-enlace:hover { border-color: var(--laton); }
+.marmol-enlace:focus-visible, .tarjeta-info h3 a:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
 .tarjeta-info h3 { font-size: 24px; margin: 8px 0 4px; }
 .tarjeta-info .cat { font-size: 13px; color: var(--veta); }
 
@@ -228,6 +558,55 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .spec dt { color: var(--veta); }
 .spec dd { text-align: right; }
 .nota-imagen { font-size: 13px; color: var(--veta); margin-top: 12px; font-style: italic; }
+.detalle-wa {
+  display: inline-flex; align-items: center; gap: 8px; margin: 18px 0 0 24px;
+  font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--veta); border-bottom: 1px solid transparent; transition: color 0.25s, border-color 0.25s;
+}
+.detalle-wa:hover { color: var(--laton); border-color: var(--laton); }
+.detalle-wa:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+@media (max-width: 560px) { .detalle-wa { display: flex; margin-left: 0; margin-top: 16px; } }
+
+/* ---------- Formulario de cotización ---------- */
+.form-cotizar {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px;
+  max-width: 760px;
+}
+.campo { display: flex; flex-direction: column; gap: 10px; }
+.campo-ancho { grid-column: 1 / -1; }
+.campo label {
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--laton); font-weight: 500;
+}
+.campo .opcional { color: var(--veta); letter-spacing: 0.14em; margin-left: 8px; }
+.campo input, .campo select, .campo textarea {
+  background: var(--carbon); border: 1px solid var(--linea); border-radius: 0;
+  color: var(--hueso); font-family: var(--font-body); font-weight: 300;
+  font-size: 16px; line-height: 1.5; padding: 14px 16px;
+  transition: border-color 0.25s;
+}
+.campo textarea { resize: vertical; min-height: 120px; }
+.campo input::placeholder, .campo textarea::placeholder { color: var(--veta); opacity: 1; }
+.campo input:hover, .campo select:hover, .campo textarea:hover { border-color: var(--veta); }
+.campo input:focus, .campo select:focus, .campo textarea:focus {
+  outline: none; border-color: var(--laton);
+}
+.campo input:focus-visible, .campo select:focus-visible, .campo textarea:focus-visible {
+  outline: 1px solid var(--laton); outline-offset: 3px;
+}
+.campo select {
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%238A8A86' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
+  padding-right: 44px;
+}
+.campo select:invalid, .campo select option[value=''] { color: var(--veta); }
+.campo select option { background: var(--carbon); color: var(--hueso); }
+.campo-error { font-size: 13px; color: var(--laton); }
+.campo [aria-invalid='true'] { border-color: rgba(200, 165, 90, 0.65); }
+@media (max-width: 700px) {
+  .form-cotizar { grid-template-columns: 1fr; gap: 28px; }
+}
 
 /* ---------- Nosotros / Contacto ---------- */
 .prosa { max-width: 68ch; }
@@ -253,11 +632,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .footer-col ul a:hover { color: var(--hueso); }
 .footer-col a:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
 
-.footer-logo { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.06em; display: flex; align-items: center; gap: 12px; }
-.footer-logo .mono {
-  width: 34px; height: 34px; border: 1px solid var(--laton); display: grid; place-items: center;
-  font-size: 13px; color: var(--laton); letter-spacing: 0; flex-shrink: 0;
-}
+.footer-logo { display: inline-flex; align-items: center; }
+.footer-logo img { display: block; height: 36px; width: auto; }
 .footer-datos { font-style: normal; display: flex; flex-direction: column; gap: 6px; margin: 22px 0; font-size: 14px; color: var(--veta); }
 .footer-datos a:hover { color: var(--hueso); }
 .footer-copy { font-size: 13px; color: var(--veta); }
@@ -290,44 +666,135 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .prosa-legal ul li { margin-bottom: 12px; }
 .prosa-legal ul li::marker { color: var(--laton); }
 
-/* ---------- WhatsApp flotante ---------- */
-.wa-flotante {
-  position: fixed; bottom: 28px; right: 28px; z-index: 46; /* sobre el banner de cookies */
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--laton); color: var(--negro);
-  display: grid; place-items: center;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-  transition: transform 0.25s;
+/* ---------- Indicador de secciones (riel derecho, solo Home) ---------- */
+.indicador-secciones {
+  position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+  z-index: 45; /* bajo el tab de newsletter (46) y el banner de cookies (48) */
+  display: flex; flex-direction: column; gap: 14px;
 }
-.wa-flotante:hover { transform: scale(1.08); }
+.indicador-secciones button {
+  width: 8px; height: 8px; padding: 0;
+  background: transparent; border: 1px solid var(--veta); border-radius: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.indicador-secciones button:hover { border-color: var(--hueso); }
+.indicador-secciones button:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+.indicador-secciones button.activo { background: var(--laton); border-color: var(--laton); }
+/* Solo escritorio; en viewports bajos cedería el riel al tab de newsletter. */
+@media (max-width: 900px), (max-height: 700px) {
+  .indicador-secciones { display: none; }
+}
+
+/* ---------- Newsletter (tab + panel anclado, esquina inferior derecha) ---------- */
+.news-tab {
+  position: fixed; bottom: 28px; right: 28px; z-index: 46; /* bajo el banner de cookies (48) */
+  background: var(--carbon); border: 1px solid var(--linea); color: var(--hueso);
+  padding: 13px 18px; display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+  transition: border-color 0.25s, color 0.25s;
+}
+.news-tab:hover { border-color: var(--laton); color: var(--laton); }
+.news-tab:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+/* Versión compacta en móvil (~70%): no debe tocar el pill de cookies desde 320px. */
+@media (max-width: 560px) {
+  .news-tab {
+    padding: 9px 12px; gap: 8px;
+    font-size: 10px; letter-spacing: 0.14em;
+    right: 16px; bottom: 30px; /* alineado óptico con el pill (44px) */
+  }
+}
+/* Con el footer a la vista, el tab se retira (fundido + descenso) para no
+   enciamarse con los iconos sociales; visibility retrasada lo saca del tab order. */
+.news-tab {
+  transition: border-color 0.25s, color 0.25s, opacity 0.3s ease, transform 0.3s ease, visibility 0s;
+}
+.news-tab.oculto {
+  opacity: 0; transform: translateY(calc(100% + 28px));
+  visibility: hidden; pointer-events: none;
+  transition: border-color 0.25s, color 0.25s, opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+.news-panel {
+  position: fixed; bottom: 28px; right: 28px; z-index: 47; /* sobre el tab, bajo el banner (48) */
+  width: min(360px, calc(100vw - 104px)); /* deja libre la esquina del pill de cookies en móvil */
+  background: var(--carbon); border: 1px solid var(--linea);
+  padding: 28px;
+  animation: aparecerPanel 0.3s ease-out;
+}
+@keyframes aparecerPanel { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+.news-panel h2 { font-size: 22px; margin: 0 0 20px; max-width: 12ch; }
+.news-cerrar {
+  position: absolute; top: 10px; right: 10px;
+  width: 32px; height: 32px; display: grid; place-items: center;
+  background: none; border: none; color: var(--veta); transition: color 0.25s;
+}
+.news-cerrar:hover { color: var(--laton); }
+.news-cerrar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+
+.news-campo { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.news-campo label {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--veta); font-weight: 500;
+}
+.news-campo input {
+  background: transparent; border: none; border-bottom: 1px solid var(--linea); border-radius: 0;
+  color: var(--hueso); font-family: var(--font-body); font-weight: 300; font-size: 15px;
+  padding: 8px 0; transition: border-color 0.25s;
+}
+.news-campo input:hover { border-bottom-color: var(--veta); }
+.news-campo input:focus { outline: none; border-bottom-color: var(--laton); }
+
+.news-consentimiento { align-items: flex-start; margin-bottom: 16px; }
+.news-consentimiento input { margin-top: 2px; }
+.news-consentimiento span { font-size: 13px; color: var(--veta); line-height: 1.5; }
+.news-consentimiento a { color: var(--laton); border-bottom: 1px solid transparent; transition: border-color 0.25s; }
+.news-consentimiento a:hover { border-color: var(--laton); }
+.news-consentimiento a:focus-visible { outline: 1px solid var(--laton); outline-offset: 2px; }
+
+.news-enviar {
+  background: none; border: none; padding: 2px 0; margin-top: 6px;
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--laton); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+  border-bottom: 1px solid transparent; transition: border-color 0.25s;
+}
+.news-enviar:hover { border-color: var(--laton); }
+.news-enviar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+
+.news-gracias { color: var(--veta); font-size: 15px; max-width: 26ch; }
+.news-panel .campo-error { margin: 0 0 12px; }
 
 /* ---------- Banner de cookies ---------- */
 .cookie-banner {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 48; /* sobre el botón de WhatsApp */
   background: var(--carbon); color: var(--hueso);
   border-top: 1px solid var(--linea);
-  padding: 36px 0 32px;
+  padding: 40px 0 36px;
   max-height: 85vh; overflow-y: auto;
   animation: subirBanner 0.4s ease-out;
 }
 @keyframes subirBanner { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.cookie-inner { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 56px; }
+/* Dos columnas: texto (~65%) a la izquierda, acciones a la derecha centradas verticalmente. */
+.cookie-inner {
+  position: relative;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px 48px; align-items: center;
+}
 .cookie-cerrar {
-  position: absolute; top: -12px; right: 24px;
+  position: absolute; top: -14px; right: 0;
   width: 36px; height: 36px; display: grid; place-items: center;
   background: none; border: none; color: var(--veta); transition: color 0.25s;
 }
-.cookie-cerrar:hover { color: var(--hueso); }
+.cookie-cerrar:hover { color: var(--laton); }
 .cookie-cerrar:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
 
 .cookie-texto { max-width: 640px; }
-.cookie-texto h2 { font-size: 21px; margin-bottom: 12px; }
-.cookie-texto p { font-size: 14px; color: var(--veta); margin: 0 0 20px; max-width: 62ch; }
+.cookie-texto h2 { font-size: 21px; margin-bottom: 10px; }
+.cookie-texto p { font-size: 14px; color: var(--veta); margin: 0 0 22px; max-width: 62ch; }
 .cookie-texto p a { color: var(--laton); border-bottom: 1px solid transparent; transition: border-color 0.25s; }
 .cookie-texto p a:hover { border-color: var(--laton); }
 .cookie-texto p a:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
 
-.cookie-categorias { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 16px; }
+.cookie-categorias { display: flex; gap: 14px 28px; flex-wrap: wrap; margin-bottom: 16px; }
 .cookie-check { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer; }
 .cookie-check input {
   appearance: none; -webkit-appearance: none;
@@ -358,9 +825,10 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .cookie-detalle dt::after { content: ':'; }
 .cookie-detalle dd { color: var(--veta); margin: 0; }
 
-.cookie-acciones { display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; padding-top: 6px; }
+/* Botones en fila, alineados al borde derecho, con la esquina superior libre para la X. */
+.cookie-acciones { display: flex; flex-direction: row; justify-content: flex-end; align-items: center; gap: 14px; }
 .cookie-pill {
-  border-radius: 999px; padding: 16px 40px; min-width: 240px;
+  border-radius: 999px; padding: 15px 34px;
   font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
   border: 1px solid var(--hueso); background: transparent; color: var(--hueso);
   transition: all 0.3s; white-space: nowrap;
@@ -372,21 +840,49 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 
 @media (max-width: 860px) {
   .cookie-banner { padding: 28px 0 24px; }
-  .cookie-inner { flex-direction: column; gap: 24px; }
-  .cookie-cerrar { top: -8px; right: 12px; }
-  .cookie-categorias { gap: 16px 24px; }
-  .cookie-acciones { flex-direction: column; width: 100%; padding-top: 0; }
-  .cookie-pill { width: 100%; min-width: 0; }
+  .cookie-inner { grid-template-columns: 1fr; gap: 20px; align-items: stretch; }
+  .cookie-cerrar { top: -8px; right: -8px; }
+  /* El título deja libre la esquina de la X. */
+  .cookie-texto h2 { padding-right: 44px; }
+  .cookie-categorias { gap: 14px 24px; }
+  /* Lado a lado si caben (≥ ~480px); en pantallas muy angostas se apilan a lo ancho. */
+  .cookie-acciones { width: 100%; flex-wrap: wrap; gap: 12px; }
+  .cookie-pill { flex: 1 1 200px; padding: 15px 20px; }
 }
 
-/* Enlace-botón del footer (reabre el banner de cookies) */
-.footer-link-btn {
-  background: none; border: none; padding: 0;
-  font-family: var(--font-body); font-weight: 300; font-size: 14px;
-  color: var(--veta); transition: color 0.25s;
+/* ---------- Botón para reabrir la configuración de cookies ---------- */
+.cookie-reabrir {
+  position: fixed; bottom: 28px; left: 28px;
+  z-index: 47; /* bajo el banner de cookies (48), sobre el contenido */
+  display: inline-flex; align-items: center;
+  height: 44px; min-width: 44px; padding: 0 11px;
+  border-radius: 999px;
+  background: var(--carbon); border: 1px solid var(--linea); color: var(--hueso);
+  transition: border-color 0.25s, color 0.25s;
 }
-.footer-link-btn:hover { color: var(--hueso); }
-.footer-link-btn:focus-visible { outline: 1px solid var(--laton); outline-offset: 4px; }
+.cookie-reabrir svg { flex-shrink: 0; }
+.cookie-reabrir-texto {
+  max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap;
+  margin-left: 0;
+  font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500;
+  transition: max-width 0.3s ease, opacity 0.3s ease, margin-left 0.3s ease;
+}
+.cookie-reabrir:hover, .cookie-reabrir:focus {
+  border-color: var(--laton); color: var(--laton);
+}
+.cookie-reabrir:hover .cookie-reabrir-texto, .cookie-reabrir:focus .cookie-reabrir-texto {
+  max-width: 230px; opacity: 1; margin-left: 10px;
+}
+.cookie-reabrir:focus-visible { outline: 1px solid var(--laton); outline-offset: 3px; }
+/* Igual que el tab de newsletter: se retira mientras el footer está a la vista. */
+.cookie-reabrir {
+  transition: border-color 0.25s, color 0.25s, opacity 0.3s ease, transform 0.3s ease, visibility 0s;
+}
+.cookie-reabrir.oculto {
+  opacity: 0; transform: translateY(calc(100% + 28px));
+  visibility: hidden; pointer-events: none;
+  transition: border-color 0.25s, color 0.25s, opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
 
 /* ---------- Skeleton ---------- */
 .skeleton { background: linear-gradient(90deg, var(--carbon) 25%, #1f1f1e 50%, var(--carbon) 75%); background-size: 200% 100%; animation: brillar 1.4s infinite; }

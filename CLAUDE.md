@@ -29,3 +29,8 @@ Defined in `src/styles/global.css`. **Never change these without asking first.**
 
 ## Known placeholders
 - WhatsApp number in `src/components/WhatsAppButton.tsx` is a placeholder (`52XXXXXXXXXX`).
+
+## Design Context
+- **PRODUCT.md** (project root) is the strategic brief: brand register, web platform, audience (skeptical designers/architects + affluent homeowners in Mexico), positioning ("atelier-level marble furniture, made to measure in Mexico"), belief ladder, and anti-references. Read it before any design work.
+- **DESIGN.md** (project root) is the visual spec: North Star "El Museo de Noche", named color roles (Negro Sala / Carbón / Hueso / Latón / Gris Veta / Línea), flat hairline-bordered elevation doctrine, square-cut "placas de museo" components.
+- Key principles: the stone is the protagonist; restraint proves the category; every path ends in a WhatsApp conversation; never fabricate proof (no invented testimonials/press/logos).

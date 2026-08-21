@@ -47,8 +47,12 @@ export default function ProductoDetalle() {
           <div className="spec"><dt>Fabricación</dt><dd>A la medida, sobre pedido</dd></div>
           <div className="spec"><dt>Origen</dt><dd>Hecho en México</dd></div>
         </dl>
-        <a className="btn oro" href={urlWhatsApp(`Hola K+A Mármoles, me interesa la pieza "${producto.nombre}". ¿Me pueden cotizar?`)} target="_blank" rel="noopener noreferrer">
+        <Link className="btn oro" to={`/cotizar?proyecto=mueble&interes=${encodeURIComponent(producto.nombre)}`}>
           Cotizar esta pieza
+        </Link>
+        <a className="detalle-wa" href={urlWhatsApp(`Hola K+A Mármoles, me interesa la pieza "${producto.nombre}". ¿Me pueden cotizar?`)}
+          target="_blank" rel="noopener noreferrer">
+          o escríbenos por WhatsApp <span aria-hidden="true">→</span>
         </a>
       </div>
     </div>

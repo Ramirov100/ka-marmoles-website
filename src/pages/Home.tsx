@@ -1,9 +1,28 @@
 import { Link } from 'react-router-dom'
 import SEO from '../components/SEO'
 import ProductCard from '../components/ProductCard'
-import MarbleSwatch from '../components/MarbleSwatch'
+import IndicadorSecciones, { type Seccion } from '../components/IndicadorSecciones'
+import HeroCarrusel, { type ImagenHero } from '../components/HeroCarrusel'
 import { useProductos } from '../lib/useProductos'
 import { urlWhatsApp } from '../components/WhatsAppButton'
+
+// Las 4 más fuertes de public/heroes/: la actual (baño oscuro), el lobby Statuario,
+// la recámara en mármol gris y el baño luminoso con grifería dorada.
+const IMAGENES_HERO: ImagenHero[] = [
+  { src: '/heroes/hero-interior-1.jpg', posMovil: '62% center' },
+  { src: '/heroes/hero-interior-4.jpg' },
+  { src: '/heroes/hero-interior-5.jpg' },
+  { src: '/heroes/hero-interior-3.jpg' },
+]
+
+const SECCIONES_HOME: Seccion[] = [
+  { id: 'inicio', nombre: 'Inicio' },
+  { id: 'destacados', nombre: 'Piezas destacadas' },
+  { id: 'proceso', nombre: 'El proceso' },
+  { id: 'taller', nombre: 'Taller K+A' },
+  { id: 'materiales-home', nombre: 'Materiales' },
+  { id: 'cotiza', nombre: 'Cotiza tu pieza' },
+]
 
 const PASOS = [
   {
@@ -23,13 +42,15 @@ const PASOS = [
   },
 ]
 
-const MATERIALES = [
-  { tono: 'blanco', nombre: 'Calacatta', seed: 7 },
-  { tono: 'negro', nombre: 'Negro Marquina', seed: 11 },
-  { tono: 'travertino', nombre: 'Travertino', seed: 5 },
-  { tono: 'verde', nombre: 'Verde Tikal', seed: 9 },
-  { tono: 'gris', nombre: 'Gris Oriental', seed: 13 },
-] as const
+// Cinco piedras reales del catálogo (nombres exactos de materiales.ts),
+// tonalmente diversas: blanca, negra, travertino, verde y gris.
+const MATERIALES_PORTADA = [
+  { nombre: 'Statuario', imagen: '/materiales/importados/statuario.jpg' },
+  { nombre: 'Negro Marquina Brillado', imagen: '/materiales/nacionales/negro-marquina-brillado.jpg' },
+  { nombre: 'Travertino Veracruz Veta', imagen: '/materiales/nacionales/travertino-veracruz-veta.jpg' },
+  { nombre: 'Royal Green', imagen: '/materiales/importados/royal-green.jpg' },
+  { nombre: 'Barbarian Grey', imagen: '/materiales/importados/barbarian-grey.jpg' },
+]
 
 export default function Home() {
   const { productos } = useProductos()
@@ -39,8 +60,10 @@ export default function Home() {
     <>
       <SEO titulo="Mobiliario de mármol de diseño" descripcion="K+A Mármoles: mesas de comedor, mesas de centro, escritorios y estanterías en mármol. Fabricación de extraordinaria calidad y diseño de vanguardia." />
 
-      <section className="hero hero-con-fondo">
-        <div className="hero-fondo" aria-hidden="true" />
+      <IndicadorSecciones secciones={SECCIONES_HOME} />
+
+      <section id="inicio" className="hero hero-con-fondo">
+        <HeroCarrusel imagenes={IMAGENES_HERO} />
         <svg className="hero-veta" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <path d="M -50 780 C 250 700, 380 520, 520 460 S 820 420, 960 300 S 1250 180, 1500 120"
             fill="none" stroke="#C8A55A" strokeWidth="1.4" opacity="0.55" />
@@ -49,21 +72,19 @@ export default function Home() {
         </svg>
         <div className="container hero-contenido">
           <span className="eyebrow">K+A Design · Ciudad de México</span>
-          <h1>La piedra, hecha <em>mueble</em>.</h1>
+          <h1>Donde la naturaleza se convierte en <em>arte.</em></h1>
           <p>
             Fabricamos mobiliario de mármol de extraordinaria calidad y diseño de vanguardia.
             Cada pieza nace de una losa única, seleccionada y trabajada por nuestros artesanos.
           </p>
           <div className="hero-acciones">
             <Link to="/coleccion" className="btn">Ver colección</Link>
-            <a className="btn oro" href={urlWhatsApp('Hola K+A Mármoles, quiero cotizar una pieza.')} target="_blank" rel="noopener noreferrer">
-              Cotizar por WhatsApp
-            </a>
+            <Link to="/cotizar" className="btn oro">Cotizar</Link>
           </div>
         </div>
       </section>
 
-      <section className="seccion">
+      <section id="destacados" className="seccion">
         <div className="container">
           <div className="seccion-cabecera">
             <div>
@@ -78,7 +99,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="seccion proceso">
+      <section id="proceso" className="seccion proceso">
         <div className="container">
           <span className="eyebrow">El proceso</span>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', margin: '14px 0 56px', maxWidth: '20ch' }}>
@@ -96,14 +117,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="interludio" aria-label="Mesa de centro giratoria en mármol">
+      <section id="taller" className="interludio" aria-label="Interior en mármol Statuario con la filosofía del taller">
         <blockquote>
           <p>«El mármol no se fabrica. Se descubre, y se le da forma.»</p>
           <cite>— Taller K+A</cite>
         </blockquote>
       </section>
 
-      <section className="seccion">
+      <section id="materiales-home" className="seccion">
         <div className="container">
           <span className="eyebrow">Materiales</span>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', margin: '14px 0 24px', maxWidth: '22ch' }}>
@@ -114,19 +135,21 @@ export default function Home() {
             Cada proyecto puede fabricarse a la medida: dimensiones, acabado y piedra a elección.
           </p>
           <ul className="materiales">
-            {MATERIALES.map(m => (
+            {MATERIALES_PORTADA.map(m => (
               <li key={m.nombre} className="material">
-                <div className="material-swatch">
-                  <MarbleSwatch tono={m.tono} seed={m.seed} titulo={`Mármol ${m.nombre}`} />
-                </div>
-                <span className="material-nombre">{m.nombre}</span>
+                <Link to="/materiales" aria-label={`Ver materiales — ${m.nombre}`}>
+                  <div className="material-swatch">
+                    <img src={m.imagen} alt={`Piedra ${m.nombre}`} loading="lazy" />
+                  </div>
+                  <span className="material-nombre">{m.nombre}</span>
+                </Link>
               </li>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="cta-banda">
+      <section id="cotiza" className="cta-banda">
         <div className="container cta-banda-inner">
           <span className="eyebrow">A la medida</span>
           <h2>Cotiza tu pieza a la medida.</h2>

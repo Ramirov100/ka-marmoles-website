@@ -6,6 +6,13 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3001
+    },
+    {
+      "name": "ka-marmoles-verify",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "3011"],
+      "port": 3011,
+      "autoPort": false
     }
   ]
 }
